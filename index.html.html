@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Finaqular — Contact Us</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- =======================
+   FINAQULAR GEN-Z FINTECH STYLE
+========================== -->
+<style>
+:root {
+  --bg1: #050b18;
+  --bg2: #0a0f1f;
+  --primary: #00f0ff;
+  --primary-soft: rgba(0,240,255,0.12);
+  --text: #eef6ff;
+  --muted: #8ea2c6;
+  --glass: rgba(255,255,255,0.06);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: "Inter", sans-serif;
+  background: radial-gradient(circle at top, #071426, #050b18 60%);
+  height: 100vh;
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* Animated floating blobs */
+.blob {
+  position: fixed;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(0,255,230,0.4), transparent);
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: float 12s infinite ease-in-out;
+  z-index: -1;
+}
+.blob:nth-child(1) { top:10%; left:-10%; animation-delay:0s; }
+.blob:nth-child(2) { bottom:5%; right:-10%; animation-delay:3s; }
+.blob:nth-child(3) { top:50%; right:20%; animation-delay:6s; }
+
+@keyframes float {
+  0% { transform: translateY(0px) translateX(0px); }
+  50% { transform: translateY(-40px) translateX(40px); }
+  100% { transform: translateY(0px) translateX(0px); }
+}
+
+/* HEADER */
+header {
+  width: 100%;
+  padding: 20px 26px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  background: linear-gradient(90deg, #00f0ff, #00aaff, #00f6c9);
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.tagline {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* FORM CARD */
+.card {
+  width: 92%;
+  max-width: 460px;
+  margin: 40px auto;
+  background: var(--glass);
+  border: 1px solid rgba(255,255,255,0.08);
+  padding: 28px;
+  border-radius: 18px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 40px rgba(0,255,255,0.08);
+  animation: fadeUp 0.9s ease;
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform: translateY(20px);}
+  to   { opacity:1; transform: translateY(0);}
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+p.sub {
+  color: var(--muted);
+  margin-bottom: 20px;
+  font-size: 13px;
+}
+
+label {
+  font-size: 13px;
+  color: var(--muted);
+  display: block;
+  margin-bottom: 6px;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px;
+  color: var(--text);
+  margin-bottom: 14px;
+  font-size: 15px;
+}
+
+textarea { min-height: 90px; resize: vertical; }
+
+button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(90deg,#00f0ff,#00aaff);
+  border:none;
+  border-radius: 12px;
+  font-weight: 700;
+  color: #041014;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(0,255,255,0.25);
+}
+
+/* Messages */
+#msg {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Footer */
+footer {
+  text-align:center;
+  margin-top:50px;
+  padding:20px;
+  font-size:12px;
+  color:var(--muted);
+}
+
+</style>
+</head>
+<body>
+
+<!-- Floating Gen-Z neon blobs -->
+<div class="blob"></div>
+<div class="blob"></div>
+<div class="blob"></div>
+
+<header>
+  <div class="logo">FINAQULAR</div>
+  <div class="tagline">Modern CRM • Powered by Cloud AI</div>
+</header>
+
+<div class="card">
+  <h2>Get in Touch</h2>
+  <p class="sub">We’ll reach back to you within 24 hours.</p>
+
+  <form id="leadForm">
+    <label>Name</label>
+    <input type="text" id="name" placeholder="Your full name" required>
+
+    <label>Email</label>
+    <input type="email" id="email" placeholder="example@email.com" required>
+
+    <label>Phone</label>
+    <input type="text" id="phone" placeholder="+353 ••• ••••" required>
+
+    <label>Comment</label>
+    <textarea id="comment" placeholder="Tell us how we can help"></textarea>
+
+    <button type="submit">Submit</button>
+    <div id="msg"></div>
+  </form>
+</div>
+
+<footer>© 2025 Finaqular CRM • Cloud-native & AI-ready</footer>
+
+
+<!-- ======================================
+   FIREBASE + LOGIC (JS)
+======================================= -->
+<script type="module">
+/* -------------------------
+   1. FIREBASE INITIALIZATION
+-------------------------- */
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } 
+from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDPqbxxoNUos9Zqe-En4qQghHPLjCUN3vA",
+  authDomain: "finaqular-crm.firebaseapp.com",
+  projectId: "finaqular-crm",
+  storageBucket: "finaqular-crm.firebasestorage.app",
+  messagingSenderId: "708297871714",
+  appId: "1:708297871714:web:bff1ff1976f33bb1b55c3b"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* -------------------------
+   2. FORM SUBMIT HANDLER
+-------------------------- */
+const form = document.getElementById("leadForm");
+const msg = document.getElementById("msg");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  msg.textContent = "Submitting...";
+
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const comment = document.getElementById("comment").value.trim();
+
+  if (!name || !email || !phone) {
+    msg.textContent = "Please fill all required fields.";
+    return;
+  }
+
+  try {
+    await addDoc(collection(db, "leads"), {
+      name,
+      email,
+      phone,
+      comment,
+      status: "New",
+      createdAt: serverTimestamp(),
+      source: "Public Website"
+    });
+
+    msg.style.color = "#00f0ff";
+    msg.textContent = "Submitted successfully ✔";
+    form.reset();
+
+    setTimeout(() => msg.textContent = "", 2500);
+
+  } catch (err) {
+    msg.style.color = "#ff6b6b";
+    msg.textContent = "Error: " + err.message;
+  }
+});
+</script>
+
+</body>
+</html>
